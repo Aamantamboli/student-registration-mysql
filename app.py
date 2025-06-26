@@ -98,9 +98,9 @@ def register_student():
 if __name__ == '__main__':
     # For local development: ensure you set these environment variables
     # For example:
-    # export DB_HOST="your-rds-endpoint.us-east-1.rds.amazonaws.com"
-    # export DB_USER="admin"
-    # export DB_PASSWORD="your_password"
-    # export DB_NAME="studentdb"
+    export DB_HOST="student-registration-db.c5ygg24y8v8k.ap-south-1.rds.amazonaws.com"
+    export DB_USER="admin"
+    export DB_PASSWORD="studendb123"
+    export DB_NAME="studentdb"
     # python3 app.py
     app.run(host='0.0.0.0', port=5000, debug=True) # debug=True is for local development only
