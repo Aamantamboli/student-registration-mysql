@@ -2,10 +2,13 @@
 from flask import Flask, render_template, request, redirect, url_for
 import pymysql.cursors
 import os
+from dotenv import load_dotenv
 
-app = Flask(__name__, static_folder='.', template_folder='templates') # Serve static files from current directory, templates from 'templates' folder
+load_dotenv()  # Load environment variables from .env file
 
-# --- Database Configuration (Environment Variables - IMPORTANT for EC2) ---
+app = Flask(__name__, static_folder='.', template_folder='templates')  # Serve static files from current directory, templates from 'templates' folder
+
+# --- Database Configuration (Environment Variables) ---
 DB_HOST = os.environ.get('DB_HOST')        # RDS Endpoint
 DB_USER = os.environ.get('DB_USER')        # RDS Master Username
 DB_PASSWORD = os.environ.get('DB_PASSWORD')# RDS Master Password
@@ -19,7 +22,7 @@ def get_db_connection():
             user=DB_USER,
             password=DB_PASSWORD,
             database=DB_NAME,
-            cursorclass=pymysql.cursors.DictCursor # Returns rows as dictionaries
+            cursorclass=pymysql.cursors.DictCursor  # Returns rows as dictionaries
         )
         return connection
     except Exception as e:
@@ -45,15 +48,14 @@ def register_student():
         student_data = {
             'name': request.form['name'],
             'address': request.form['address'],
-            'age': int(request.form['age']), # Convert to int
+            'age': int(request.form['age']),  # Convert to int
             'qualification': request.form['qualification'],
-            'percentage': float(request.form['percentage']), # Convert to float
-            'year': int(request.form['year']) # Convert to int
+            'percentage': float(request.form['percentage']),  # Convert to float
+            'year': int(request.form['year'])  # Convert to int
         }
 
         with connection.cursor() as cursor:
             # Create table if it doesn't exist
-            # Make sure your database user has CREATE TABLE privileges
             create_table_sql = """
             CREATE TABLE IF NOT EXISTS students (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -67,7 +69,7 @@ def register_student():
             )
             """
             cursor.execute(create_table_sql)
-            connection.commit() # Commit table creation
+            connection.commit()  # Commit table creation
 
             # Insert data into the students table
             insert_sql = """
@@ -82,25 +84,27 @@ def register_student():
                 student_data['percentage'],
                 student_data['year']
             ))
-        connection.commit() # Commit the insert operation
+        connection.commit()  # Commit the insert operation
         print(f"Student {student_data['name']} registered successfully!")
 
         return render_template('index.html', message="Student registered successfully!")
 
     except Exception as e:
         print(f"Error during student registration: {e}")
-        # Render the form again with an error message
         return render_template('index.html', error=f"An error occurred: {e}")
+
     finally:
-        connection.close() # Close the database connection
+        connection.close()  # Close the database connection
 
 # --- Run the Flask App ---
 if __name__ == '__main__':
-    # For local development: ensure you set these environment variables
-    # For example:
-    export DB_HOST="student-registration-db.c5ygg24y8v8k.ap-south-1.rds.amazonaws.com"
-    export DB_USER="admin"
-    export DB_PASSWORD="studendb123"
-    export DB_NAME="studentdb"
-    # python3 app.py
-    app.run(host='0.0.0.0', port=5000, debug=True) # debug=True is for local development only
+    # For local development, set your database credentials in a `.env` file like this:
+    #
+    # DB_HOST=student-registration-db.c5ygg24y8v8k.ap-south-1.rds.amazonaws.com
+    # DB_USER=admin
+    # DB_PASSWORD=studendb123
+    # DB_NAME=studentdb
+    #
+    # Then run: python3 app.py
+
+    app.run(host='0.0.0.0', port=5000, debug=True)  # debug=True for local development only
