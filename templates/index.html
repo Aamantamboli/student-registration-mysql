@@ -1,0 +1,56 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Student Registration Form</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+    <div class="form-container">
+        <h1>Student Registration</h1>
+        <!-- The form now posts directly to the /register endpoint -->
+        <form action="/register" method="POST">
+            <div class="input-group">
+                <label for="name">Student Name</label>
+                <input type="text" id="name" name="name" required />
+            </div>
+
+            <div class="input-group">
+                <label for="address">Student Address</label>
+                <input type="text" id="address" name="address" required />
+            </div>
+
+            <div class="input-group">
+                <label for="age">Student Age</label>
+                <input type="number" id="age" name="age" required />
+            </div>
+
+            <div class="input-group">
+                <label for="qualification">Student Qualification</label>
+                <input type="text" id="qualification" name="qualification" required />
+            </div>
+
+            <div class="input-group">
+                <label for="percentage">Student Percentage</label>
+                <input type="number" id="percentage" name="percentage" step="0.01" required />
+            </div>
+
+            <div class="input-group">
+                <label for="year">Year Passed</label>
+                <input type="number" id="year" name="year" required />
+            </div>
+
+            <button type="submit">Register</button>
+            <!-- Message display area for success/error from Flask -->
+            {% if message %}
+                <div class="message" style="margin-top: 15px; text-align: center; color: green;">{{ message }}</div>
+            {% endif %}
+            {% if error %}
+                <div class="message" style="margin-top: 15px; text-align: center; color: red;">{{ error }}</div>
+            {% endif %}
+        </form>
+    </div>
+</body>
+</html>

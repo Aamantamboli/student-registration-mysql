@@ -1,0 +1,4 @@
+# requirements.txt
+Flask==2.3.3
+PyMySQL==1.1.0
+gunicorn==22.0.0 # For production deployment on EC2
