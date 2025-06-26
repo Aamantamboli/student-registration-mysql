@@ -1,4 +1,4 @@
-# requirements.txt
 Flask==2.3.3
 PyMySQL==1.1.0
-gunicorn==22.0.0 # For production deployment on EC2
+gunicorn==22.0.0
+python-dotenv==1.0.1 # Add this line
